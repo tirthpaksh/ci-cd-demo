@@ -3,15 +3,33 @@
 
 
 ## Preface
-This repository is the sample of web application using golang.
+pipeline {
+  agent any
+  tools {
+      go 'gotest'
+  }
+  environment {
+      GO111MODULE='on'
+  }
+  
+  stages {
+    stage('Test') {
+      steps {
+        git 'https://github.com/databinaries001/ci-cd-demo.git'
+        sh 'go test ./...'
+      }
+    }
+    stage('Build') {
+        steps {
+        git 'https://github.com/databinaries001/ci-cd-demo.git'
+        sh 'go build .'
+        }
+    }
+    stage('Run') {
+        steps {
+            sh 'cd /var/lib/jenkins/workspace/full-cicd-go && go-webapp-sample &'
+        }
+    }
 
-this is v.1
-this is v2.
-this is v3
-this is live ci-cd
-this is n=another line of code
-this si another line
-this is the repo1
-this is the hook demo this 
-this is the another line of code 
-
+  }
+}
